@@ -11,32 +11,16 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) throws IOException {
         /* Declaring Variables */
-        Scanner scan = new Scanner(System.in);
-        Person person = new Person();
-        Dog dog = new Dog();
+        Program program = new Program();
+        Program.OPTION = "6";
+        Scanner scanner = new Scanner(System.in);
 
-        /* Doing a Quick Hello World */
-        System.out.println("Hello World!");
-        System.out.println();
-
-        /* Doing Quick Test with Person Class */
-        person.doingQuickTests();
-
-        /* Doing a Pause */
-        System.out.print("Press any key to continue . . . ");
-        scan.nextLine();
-
-        /* Clearing the Screen */
+        // Doing a Quick Presentation
+        System.out.println("--------------- Java Basics -----------------");
+        System.out.println("Welcome! Please enter your name");
+        Program.USER_NAME = scanner.nextLine();
         System.out.flush();
+        program.initializeProgram();
 
-        /* Printing the Dog Information */
-        dog.doingQuickTests();
-
-        /* Doing a Pause */
-        System.out.print("Press any key to continue . . . ");
-        scan.nextLine();
-
-        /* Clearing the Screen */
-        System.out.flush();
     }
 }
