@@ -1,9 +1,18 @@
 package org.example;
 
+import io.helidon.common.http.Http;
+import io.helidon.webserver.*;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+
+import java.util.concurrent.Flow;
+
+
 
 /**
  * Author: Felipe Castro
@@ -11,7 +20,7 @@ import java.util.Scanner;
  * Information: Class to Implement the Interface called Menu and create the Program
  */
 
-public class Program implements Menu {
+public class Program implements Menu, Handler {
     // Attributes
     static String OPTION = "";
     static String USER_NAME = "";
@@ -26,6 +35,10 @@ public class Program implements Menu {
 
             OPTION = displayPrincipalMenu();
             switch (Integer.parseInt(OPTION)) {
+                case 0:
+                    initializingWebServer();
+                    OPTION = "6";
+                    break;
                 case 1:
                     OPTION = displayHello();
                     break;
@@ -84,6 +97,7 @@ public class Program implements Menu {
     public String displayPrincipalMenu() {
         System.out.println("--------------- Principal Menu ----------------");
         System.out.println("Hello " + USER_NAME + ". Please enter the number of the option:");
+        System.out.println("0. Initialize WebServer");
         System.out.println("1. Simple Hello World.");
         System.out.println("2. Display Persons Information.");
         System.out.println("3. Display Animals Information.");
@@ -236,6 +250,36 @@ public class Program implements Menu {
     public String displayAlgorithms() {
         // Pending to Implement
         return "6";
+    }
+
+    // ---------------------- Methods for WebServer ----------------------
+
+    // (Implementing the Handler Method) Creating a Basic REST Service Application
+    public void accept(ServerRequest request, ServerResponse response) {
+        response.status(Http.Status.OK_200);
+        response.headers().put("Content-Type", "text/plain; charset=UTF-8");
+        response.send("Hello World, I am creating a Basic REST Service Application");
+    }
+
+    // Initializing the Web Server
+    public void initializingWebServer() {
+        try {
+            Program restProgram = new Program();
+            System.out.println("--------------- Initializing Web Server ---------------");
+            Routing routing = Routing.builder().get("/intro",restProgram).build();
+            ServerConfiguration config = ServerConfiguration.builder().bindAddress(InetAddress.getLocalHost()).port(8080).build();
+            WebServer webServer = WebServer.create(config, routing);
+            webServer.start();
+            System.out.println("Initialized Web Server Without issues");
+            System.out.println("Access on your browser: "+"http://192.168.0.6:8080/intro");
+            /* Doing a Pause */
+            System.out.print("Press any key to return to the main menu . . . ");
+            scanner.nextLine();
+
+        } catch (UnknownHostException ex) {
+            System.out.println("Error Message: "+ex.getMessage());
+            ex.printStackTrace();
+        }
     }
 
 
